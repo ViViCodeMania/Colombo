@@ -1,17 +1,17 @@
 package main
 
 import (
+	"bufio"
 	"fmt"
 	"os"
 	"path/filepath"
-	"strings"
 	"strconv"
+	"strings"
 	"time"
-	"bufio"
 )
 
 const (
-	path = "/Users/CodeMania/Documents/编程相关"
+	path      = "/Users/CodeMania/Documents/编程相关"
 	indexfile = "/Users/CodeMania/.vpm/index.dat"
 )
 
@@ -30,7 +30,7 @@ func listFunc(path string, f os.FileInfo, err error) error {
 	fileName := strings.Replace(nameParts[0], " ", "_", -1)
 	suffix := "nil"
 	if len(nameParts) > 1 {
-		suffix = nameParts[len(nameParts) - 1]
+		suffix = nameParts[len(nameParts)-1]
 	}
 	size := strconv.FormatInt(f.Size(), 10)
 	path = "." + strings.Replace(path, " ", "_", -1)[39:]
@@ -60,7 +60,7 @@ func FileListUpdate(path string) {
 
 	for i := 0; i < len(files); i++ {
 		num := strconv.Itoa(i + 1)
-		num = num + strings.Repeat(" ", 8 - len(num))
+		num = num + strings.Repeat(" ", 8-len(num))
 		outputWriter.WriteString(num + files[i])
 	}
 	outputWriter.Flush()
