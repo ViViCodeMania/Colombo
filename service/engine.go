@@ -11,8 +11,8 @@ import (
 )
 
 const (
-	path      = "/Users/CodeMania/Documents/编程相关"
-	indexfile = "/Users/CodeMania/.vpm/index.dat"
+	targetPath      = "/Users/CodeMania/Documents/编程相关"
+	indexFile = "/Users/CodeMania/.vpm/index.dat"
 )
 
 var files []string
@@ -27,7 +27,8 @@ func listFunc(path string, f os.FileInfo, err error) error {
 	}
 
 	nameParts := strings.Split(f.Name(), ".")
-	fileName := strings.Replace(nameParts[0], " ", "_", -1)
+	fileName := strings.ToLower(strings.Replace(nameParts[0], " ", "_", -1))
+
 	suffix := "nil"
 	if len(nameParts) > 1 {
 		suffix = nameParts[len(nameParts)-1]
@@ -47,9 +48,9 @@ func FileListUpdate(path string) {
 		fmt.Printf("filepath.Walk() returned %v\n", err)
 	}
 
-	os.Remove(indexfile)
+	os.Remove(indexFile)
 
-	outputFile, outputError := os.OpenFile(indexfile, os.O_WRONLY|os.O_CREATE, 0666)
+	outputFile, outputError := os.OpenFile(indexFile, os.O_WRONLY|os.O_CREATE, 0666)
 	if outputError != nil {
 		fmt.Printf("An error occurred with file opening or creation\n")
 		return
@@ -59,13 +60,13 @@ func FileListUpdate(path string) {
 	outputWriter := bufio.NewWriter(outputFile)
 
 	for i := 0; i < len(files); i++ {
-		num := strconv.Itoa(i + 1)
-		num = num + strings.Repeat(" ", 8-len(num))
+		num := strconv.Itoa(i + 1) + " "
 		outputWriter.WriteString(num + files[i])
 	}
 	outputWriter.Flush()
+	return
 }
 
 func main() {
-	FileListUpdate(path)
+	FileListUpdate(targetPath)
 }
