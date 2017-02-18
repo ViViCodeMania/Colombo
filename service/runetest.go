@@ -6,8 +6,19 @@ import (
 )
 
 func main() {
-	s := "haha"
-	//s := "haha"
-	ru, rucount := utf8.DecodeRuneInString(s)
-	fmt.Println(ru, " ", rucount, " ", utf8.RuneLen(ru))
+	const nihongo = "高性能linux服务器构建实战"
+	fmt.Println(getStringLengthInTerminal(nihongo))
+
 }
+
+//func getStringLengthInTerminal(s string) int {
+//	width := 0
+//	for _, c := range s {
+//		if utf8.RuneLen(c) > 2 {
+//			width += 2
+//		} else {
+//			width += 1
+//		}
+//	}
+//	return width
+//}

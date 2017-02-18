@@ -7,11 +7,17 @@ import (
 	"os"
 	"strconv"
 	"strings"
+	"unicode/utf8"
 )
 
 const (
 	lastResearch = "/Users/CodeMania/.vpm/lastSearch.dat"
 	indexFile    = "/Users/CodeMania/.vpm/index.dat"
+	numGripLength = 6
+	nameGripLength = 60
+	suffixGripLength = 8
+	sizeGripLength = 12
+	pathGripLength = 60
 )
 
 var results []string
@@ -56,29 +62,33 @@ func Find(inputKeyword string, inputFiletype string) bool {
 			resultNum := strconv.Itoa(resultCount)
 			results = append(results, resultNum+" "+fileInfo)
 
-			outputNum := resultNum + strings.Repeat(" ", 6-len(resultNum))
+			outputNum := resultNum + strings.Repeat(" ", numGripLength-len(resultNum))
 
 			outputFileName := ""
-			if len(fileName) > 32 {
-				outputFileName = fileName[:28] + "... "
+			outputFileNameLength := getStringLengthInTerminal(fileName)
+			if outputFileNameLength > nameGripLength {
+				outputFileName = fileName[:nameGripLength-6] + "... "
+				outputFileName = outputFileName + strings.Repeat(" ", nameGripLength-getStringLengthInTerminal(outputFileName))
 			} else {
-				outputFileName = fileName + strings.Repeat(" ", 32-len(fileName))
+				outputFileName = fileName + strings.Repeat(" ", nameGripLength-outputFileNameLength)
 			}
 
-			outputSuffix := fileType + strings.Repeat(" ", 8-len(fileType))
+			outputSuffix := fileType + strings.Repeat(" ", suffixGripLength-len(fileType))
 
 			outputSize := ""
-			if len(fileInfoParts[3]) > 10 {
+			if len(fileInfoParts[3]) > sizeGripLength {
 				outputSize = "e^10+"
 			} else {
-				outputSize = fileInfoParts[3] + strings.Repeat(" ", 10-len(fileInfoParts[3]))
+				outputSize = fileInfoParts[3] + strings.Repeat(" ", sizeGripLength-len(fileInfoParts[3]))
 			}
 
 			outputPath := ""
-			if len(fileInfoParts[4]) > 48 {
-				outputPath = fileInfoParts[4][:44] + "... "
+			outputPathLength := getStringLengthInTerminal(fileInfoParts[4])
+			if outputPathLength > pathGripLength {
+				outputPath = fileInfoParts[4][:pathGripLength-6] + "... "
+				outputPath = outputPath + strings.Repeat(" ", pathGripLength-getStringLengthInTerminal(outputPath))
 			} else {
-				outputPath = fileInfoParts[4] + strings.Repeat(" ", 48-len(fileInfoParts[4]))
+				outputPath = fileInfoParts[4] + strings.Repeat(" ", pathGripLength-outputPathLength)
 			}
 
 			outputModDate := fileInfoParts[5]
@@ -95,6 +105,18 @@ func Find(inputKeyword string, inputFiletype string) bool {
 
 	return false
 
+}
+
+func getStringLengthInTerminal(s string) int {
+	width := 0
+	for _, c := range s {
+		if utf8.RuneLen(c) >= 2 {
+			width += 2
+		} else {
+			width += 1
+		}
+	}
+	return width
 }
 
 func outputResults() {
@@ -116,9 +138,14 @@ func outputResults() {
 }
 
 func main() {
-	//argNum := len(os.Args)
-	inputKeyword := os.Args[1]
-	inputFiletype := os.Args[2]
+	inputKeyword, inputFiletype := "", "nil"
+	if len(os.Args) > 3 {
+		inputKeyword = os.Args[1]
+		inputFiletype = os.Args[2]
+	} else {
+		inputKeyword = os.Args[1]
+	}
+
 
 	if Find(inputKeyword, inputFiletype) {
 		outputResults()
