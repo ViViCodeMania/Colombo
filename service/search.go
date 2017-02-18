@@ -3,15 +3,15 @@ package main
 import (
 	"bufio"
 	"fmt"
-	"os"
-	"strings"
-	"strconv"
 	"io"
+	"os"
+	"strconv"
+	"strings"
 )
 
 const (
 	lastResearch = "/Users/CodeMania/.vpm/lastSearch.dat"
-	indexFile = "/Users/CodeMania/.vpm/index.dat"
+	indexFile    = "/Users/CodeMania/.vpm/index.dat"
 )
 
 var results []string
@@ -53,10 +53,38 @@ func Find(inputKeyword string, inputFiletype string) bool {
 
 		if isKeywordMacth {
 			resultCount++
-			outputNum := strconv.Itoa(resultCount)
-			outputString := outputNum + " " + fileInfo
-			results = append(results, outputString)
+			resultNum := strconv.Itoa(resultCount)
+			results = append(results, resultNum+" "+fileInfo)
+
+			outputNum := resultNum + strings.Repeat(" ", 6-len(resultNum))
+
+			outputFileName := ""
+			if len(fileName) > 32 {
+				outputFileName = fileName[:28] + "... "
+			} else {
+				outputFileName = fileName + strings.Repeat(" ", 32-len(fileName))
+			}
+
+			outputSuffix := fileType + strings.Repeat(" ", 8-len(fileType))
+
+			outputSize := ""
+			if len(fileInfoParts[3]) > 10 {
+				outputSize = "e^10+"
+			} else {
+				outputSize = fileInfoParts[3] + strings.Repeat(" ", 10-len(fileInfoParts[3]))
+			}
+
+			outputPath := ""
+			if len(fileInfoParts[4]) > 48 {
+				outputPath = fileInfoParts[4][:44] + "... "
+			} else {
+				outputPath = fileInfoParts[4] + strings.Repeat(" ", 48-len(fileInfoParts[4]))
+			}
+
+			outputModDate := fileInfoParts[5]
+			outputString := outputNum + outputFileName + outputSuffix + outputSize + outputPath + outputModDate
 			fmt.Print(outputString)
+
 		}
 
 	}
@@ -89,8 +117,8 @@ func outputResults() {
 
 func main() {
 	//argNum := len(os.Args)
-	inputKeyword := "Java"
-	inputFiletype := "pdf"
+	inputKeyword := os.Args[1]
+	inputFiletype := os.Args[2]
 
 	if Find(inputKeyword, inputFiletype) {
 		outputResults()
@@ -99,5 +127,3 @@ func main() {
 	}
 	return
 }
-
-

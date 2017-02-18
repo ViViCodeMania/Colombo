@@ -11,8 +11,8 @@ import (
 )
 
 const (
-	targetPath      = "/Users/CodeMania/Documents/编程相关"
-	indexFile = "/Users/CodeMania/.vpm/index.dat"
+	targetPath = "/Users/CodeMania/Documents/编程相关"
+	indexFile  = "/Users/CodeMania/.vpm/index.dat"
 )
 
 var files []string
@@ -60,7 +60,7 @@ func FileListUpdate(path string) {
 	outputWriter := bufio.NewWriter(outputFile)
 
 	for i := 0; i < len(files); i++ {
-		num := strconv.Itoa(i + 1) + " "
+		num := strconv.Itoa(i+1) + " "
 		outputWriter.WriteString(num + files[i])
 	}
 	outputWriter.Flush()
