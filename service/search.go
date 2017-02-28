@@ -11,13 +11,13 @@ import (
 )
 
 const (
-	lastResearch = "/Users/CodeMania/.vpm/lastSearch.dat"
-	indexFile    = "/Users/CodeMania/.vpm/index.dat"
-	numGripLength = 6
-	nameGripLength = 60
+	lastResearch     = "/Users/CodeMania/.vpm/lastSearch.dat"
+	indexFile        = "/Users/CodeMania/.vpm/index.dat"
+	numGripLength    = 6
+	nameGripLength   = 60
 	suffixGripLength = 8
-	sizeGripLength = 12
-	pathGripLength = 60
+	sizeGripLength   = 12
+	pathGripLength   = 60
 )
 
 var results []string
@@ -139,13 +139,12 @@ func outputResults() {
 
 func main() {
 	inputKeyword, inputFiletype := "", "nil"
-	if len(os.Args) > 3 {
+	if len(os.Args) > 2 {
 		inputKeyword = os.Args[1]
 		inputFiletype = os.Args[2]
 	} else {
 		inputKeyword = os.Args[1]
 	}
-
 
 	if Find(inputKeyword, inputFiletype) {
 		outputResults()

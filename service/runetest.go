@@ -1,8 +1,8 @@
 package main
 
 import (
-	"unicode/utf8"
 	"fmt"
+	"unicode/utf8"
 )
 
 func main() {
